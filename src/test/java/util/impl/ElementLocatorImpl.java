@@ -7,9 +7,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import util.ElementLocator;
 
+import java.util.List;
+
 public class ElementLocatorImpl implements ElementLocator {
 
-    private static final long TIMEOUT = 10;
+    private static final long TIMEOUT = 8;
     private final WebDriver driver;
 
     public ElementLocatorImpl(WebDriver driver){
@@ -24,5 +26,10 @@ public class ElementLocatorImpl implements ElementLocator {
     public WebElement getElementClickableIdentifiedBy(By locator) {
         return new WebDriverWait(driver, TIMEOUT)
                 .until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
+    public List<WebElement> getElementsBy(By productEntryList) {
+        return new WebDriverWait(driver, TIMEOUT)
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(productEntryList));
     }
 }

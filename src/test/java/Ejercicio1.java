@@ -10,6 +10,9 @@ import util.ParameterSource;
 import util.impl.ElementLocatorImpl;
 import util.impl.ParameterSourceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ejercicio1 {
 
     /*
@@ -30,6 +33,10 @@ public class Ejercicio1 {
     private static final By SEARCH_BAR_INPUT = By.className("nav-search-input");
     private static final By ORDER_BY_BTN = By.cssSelector("#root-app > div > div.ui-search-main.ui-search-main--exhibitor > aside > section.ui-search-view-options > div.ui-search-view-options__group > div.ui-search-sort-filter > div > div");
     private static final By MORE_EXPENSIVE_SORT = By.xpath("//*[@id=\"root-app\"]/div/div[1]/aside/section[1]/div[2]/div[1]/div/div/div/ul/li[3]/a");
+    private static final By PRODUCT_ENTRY_LIST = By.className("ui-search-layout__item");
+    private static final By PRODUCT_ENTRY_TITLE = By.className("ui-search-item__title");
+    private static final By PRODUCT_ENTRY_LINK = By.tagName("a");
+    private static final By ADD_TO_CART_BTN = By.className("andes-button--quiet");
 
     /*
      * End of elements to interact with
@@ -177,8 +184,33 @@ public class Ejercicio1 {
         String sortedURL = moreExpensive.getAttribute("href");
 
         driver.get(sortedURL);
-
     }
 
+    @Test(priority = 80)
+    public void addProductsToCart() throws InterruptedException {
+        List<WebElement> productList = elementLocator.getElementsBy(PRODUCT_ENTRY_LIST);
+        List<String> productUrls = new ArrayList<String>();
+        for (WebElement productEntry : productList){
+            String url = productEntry.findElement(PRODUCT_ENTRY_LINK).getAttribute("href");
+            productUrls.add(url);
+        }
 
+        for (int i = 0; i < parameterSource.getAmountOfProductsToAdd(); i++) {
+            addOneProductToCart(productUrls.get(i));
+        }
+    }
+
+    private void addOneProductToCart(String url) {
+        driver.get(url);
+        WebElement addToCartBtn = elementLocator.getElementIdentifiedBy(ADD_TO_CART_BTN);
+        scroll(150);
+        Actions action = new Actions(driver);
+
+        action.moveToElement(addToCartBtn).click().build().perform();
+    }
+
+    private void scroll(int amt){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,"+ amt +")");
+    }
 }

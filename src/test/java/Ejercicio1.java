@@ -28,9 +28,8 @@ public class Ejercicio1 {
     private static final By MOTOROLA_BRAND_BOX = By.xpath("//*[@id=\"root-app\"]/div/section[2]/div[2]/div/div[3]/a/div/div");
     private static final By CATEGORY_ONLY_CHECKBOX = By.id("categorySearch");
     private static final By SEARCH_BAR_INPUT = By.className("nav-search-input");
-    private static final By ORDER_BY_BTN = By.xpath("//*[@id=\"root-app\"]/div/div[1]/aside/section[1]/div[2]/div[1]/div/div/button");
-    private static final By MORE_EXPENSIVE_SORT = By.xpath("//*[@id=\"root-app\"]/div/div[1]/aside/section[1]/div[2]/div[1]/div/div/div/ul/li[3]/a/div/div");
-
+    private static final By ORDER_BY_BTN = By.cssSelector("#root-app > div > div.ui-search-main.ui-search-main--exhibitor > aside > section.ui-search-view-options > div.ui-search-view-options__group > div.ui-search-sort-filter > div > div");
+    private static final By MORE_EXPENSIVE_SORT = By.xpath("//*[@id=\"root-app\"]/div/div[1]/aside/section[1]/div[2]/div[1]/div/div/div/ul/li[3]/a");
 
     /*
      * End of elements to interact with
@@ -144,28 +143,41 @@ public class Ejercicio1 {
 
 
     @Test(priority = 50)
-    public void filterBrand() throws InterruptedException {
+    public void filterBrand(){
         WebElement brand = elementLocator.getElementIdentifiedBy(MOTOROLA_BRAND_BOX);
         brand.click();
+    }
 
+    @Test(priority = 60)
+    public void searchProduct() {
         // Find chckBox category only
         WebElement checkBoxCategory = elementLocator.getElementIdentifiedBy(CATEGORY_ONLY_CHECKBOX);
         checkBoxCategory.click();
-        
+
         // Get input field and send data
         WebElement searchInput = elementLocator.getElementIdentifiedBy(SEARCH_BAR_INPUT);
         searchInput.sendKeys(parameterSource.getSearchData());
         searchInput.sendKeys(Keys.ENTER);
+    }
 
+    @Test(priority = 70)
+    public void sortByMoreExpensive() throws InterruptedException{
         // Sort by more expensive
+        Actions actions = new Actions(driver);
+
+        Thread.sleep(1500);
+
         WebElement orderBy = elementLocator.getElementIdentifiedBy(ORDER_BY_BTN);
-        orderBy.click();
+        actions.moveToElement(orderBy).click().build().perform();
 
         WebElement moreExpensive = elementLocator.getElementIdentifiedBy(MORE_EXPENSIVE_SORT);
-        Actions actions = new Actions(driver);
-        Thread.sleep(1000);
         actions.moveToElement(moreExpensive);
         actions.click().build().perform();
+
+        String sortedURL = moreExpensive.getAttribute("href");
+
+        driver.get(sortedURL);
+
     }
 
 

@@ -8,4 +8,6 @@ public interface ElementLocator {
 
     WebElement getElementIdentifiedBy(By locator);
 
+    WebElement getElementClickableIdentifiedBy(By locator);
+
 }

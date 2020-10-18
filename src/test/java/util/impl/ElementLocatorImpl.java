@@ -20,4 +20,9 @@ public class ElementLocatorImpl implements ElementLocator {
         return new WebDriverWait(driver, TIMEOUT)
                 .until(ExpectedConditions.presenceOfElementLocated(locator));
     }
+
+    public WebElement getElementClickableIdentifiedBy(By locator) {
+        return new WebDriverWait(driver, TIMEOUT)
+                .until(ExpectedConditions.elementToBeClickable(locator));
+    }
 }

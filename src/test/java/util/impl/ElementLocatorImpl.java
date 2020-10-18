@@ -10,9 +10,14 @@ import util.ElementLocator;
 public class ElementLocatorImpl implements ElementLocator {
 
     private static final long TIMEOUT = 10;
+    private final WebDriver driver;
 
-    public WebElement waitForElementIdentified(By byLocator, WebDriver driver) {
+    public ElementLocatorImpl(WebDriver driver){
+        this.driver = driver;
+    }
+
+    public WebElement getElementIdentifiedBy(By locator) {
         return new WebDriverWait(driver, TIMEOUT)
-                .until(ExpectedConditions.presenceOfElementLocated(byLocator));
+                .until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 }

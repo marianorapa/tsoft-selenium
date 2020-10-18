@@ -6,6 +6,6 @@ import org.openqa.selenium.WebElement;
 
 public interface ElementLocator {
 
-    WebElement waitForElementIdentified(By locator, WebDriver driver);
+    WebElement getElementIdentifiedBy(By locator);
 
 }
